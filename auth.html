@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Daftar - amanahgame.store</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #013f0e4d;
+      color: rgb(255, 255, 255);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      background: #00ff374d;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ff374d;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h2 span {
+      color: gold;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      background: #00ff374d;
+      color: white;
+    }
+
+    .tabs .active {
+      background: gold;
+      color: rgb(0, 0, 0);
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #28c235;
+      color: white;
+    }
+
+    button.submit {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: gold;
+      color: rgb(4, 51, 2);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .info {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .back {
+      margin-top: 15px;
+      text-align: center;
+      cursor: pointer;
+      color: gold;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Gaming<span>Topup</span></h2>
+
+  <!-- TAB -->
+  <div class="tabs">
+    <button id="loginTab" class="active">Masuk</button>
+    <button id="registerTab">Daftar</button>
+  </div>
+
+  <!-- FORM -->
+  <form id="authForm">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+     <input type="text" id="phone" placeholder="Nomor HP" style="display:none;">
+    <button class="submit" type="submit">Masuk</button>
+  </form>
+
+  <div class="info" id="infoText">
+    Login opsional, kamu tetap bisa transaksi tanpa akun.
+  </div>
+
+  <div class="back" onclick="goBack()">← Kembali ke Beranda</div>
+</div>
+
+<script>
+const USER_BIN_ID = "69fba55ac0954111d8e84113";
+const API_KEY = "$2a$10$b7426vCN3qvmHEGqIaeofuk0b.FXiKdEHj3Nh3zapOGnat.kn3TaW";
+
+let mode = "login";
+
+// ================= TAB =================
+const loginTab = document.getElementById("loginTab");
+const registerTab = document.getElementById("registerTab");
+const form = document.getElementById("authForm");
+
+loginTab.onclick = () => {
+  mode = "login";
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
+  form.querySelector(".submit").textContent = "Masuk";
+  document.getElementById("phone").style.display = "none";
+};
+
+registerTab.onclick = () => {
+  mode = "register";
+  registerTab.classList.add("active");
+  loginTab.classList.remove("active");
+  form.querySelector(".submit").textContent = "Daftar";
+  document.getElementById("phone").style.display = "block";
+};
+
+// ================= FETCH USER =================
+async function getUsers() {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${USER_BIN_ID}/latest`, {
+    headers: {
+      "X-Master-Key": API_KEY
+    }
+  });
+
+  const data = await res.json();
+  return data.record.users || [];
+}
+
+// ================= SAVE USER =================
+async function saveUsers(users) {
+  await fetch(`https://api.jsonbin.io/v3/b/${USER_BIN_ID}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": API_KEY
+    },
+    body: JSON.stringify({ users })
+  });
+}
+
+// ================= SUBMIT =================
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const phone = document.getElementById("phone").value;
+
+  let users = await getUsers();
+
+  if (mode === "register") {
+
+    const exist = users.find(u => u.username === username);
+    if (exist) {
+      alert("Username sudah dipakai!");
+      return;
+    }
+
+    users.push({
+      username,
+      password,
+      phone
+    });
+
+    await saveUsers(users);
+
+    alert("Daftar berhasil!");
+    loginTab.click();
+
+  } else {
+
+    const user = users.find(
+      u => u.username === username && u.password === password
+    );
+
+    if (!user) {
+      alert("Login gagal!");
+      return;
+    }
+
+    localStorage.setItem("user", username);
+
+    alert("Login berhasil!");
+    window.location.href = "index.html";
+  }
+});
+
+// ================= BACK =================
+function goBack() {
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

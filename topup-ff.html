@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Up Free Fire</title>
+
+  <link rel="stylesheet" href="topup-ff.css">
+</head>
+
+<body>
+
+<div class="ff-container">
+
+  <!-- HERO -->
+  <div class="ff-hero">
+    <img src="gambarff.jpg" class="ff-logo">
+    <h2>Free Fire</h2>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="ff-step">
+    <h3>1. Masukkan ID</h3>
+    <input type="text" id="userId" placeholder="Masukkan ID Free Fire">
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="ff-step">
+    <h3>2. Pilih Nominal</h3>
+
+    <div class="product-list" id="nominalList">
+      <p class="loading-text">Loading produk...</p>
+    </div>
+  </div>
+
+  <!-- TOMBOL LANJUT -->
+  <div class="ff-step">
+    <button class="btn-main" onclick="checkout()">
+      Bayar Sekarang
+    </button>
+  </div>
+
+  <!-- STEP 3 (HIDDEN DULU) -->
+  <div class="ff-step" id="paymentStep" style="display:none;">
+    <h3>3. Pilih Metode Pembayaran</h3>
+
+    <div id="paymentMethods" class="payment-list">
+      <p class="loading-text">Loading metode...</p>
+    </div>
+
+    <button class="btn-main" onclick="finalCheckout()">
+      Lanjut Bayar
+    </button>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="ff-step" id="resultStep" style="display:none;">
+    <h3>4. Detail Pembayaran</h3>
+
+    <div id="paymentInfo"></div>
+  </div>
+
+</div>
+
+<script src="topup-ff.js"></script>
+
+</body>
+</html>

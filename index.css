@@ -1,0 +1,558 @@
+
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= BODY ================= */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0a0a0a;
+  color: rgb(197, 205, 218);
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  width: 100%;
+  background: linear-gradient(90deg, #113f08, #073501);
+  box-shadow: 0 2px 10px rgba(0, 255, 100, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.logo span {
+  color: rgb(25, 167, 12);
+}
+
+.nav-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* BUTTON */
+.menu-btn,
+.icon-btn {
+  background: linear-gradient(145deg, #063000, #001a04);
+  border: none;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 8px rgba(21, 255, 0, 0.4);
+}
+
+.menu-btn:hover,
+.icon-btn:hover {
+  background: linear-gradient(145deg, #0d5000, #072a00);
+  transform: scale(1.05);
+}
+
+/* ================= OVERLAY ================= */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 998;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background: linear-gradient(180deg, #000, #002b02);
+  box-shadow: 2px 0 15px rgba(0, 255, 21, 0.5);
+  transition: 0.3s;
+  z-index: 999;
+  padding: 20px;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header h2 {
+  color: white;
+}
+
+.sidebar-header span {
+  color: rgb(0, 255, 0);
+}
+
+/* ================= MENU ================= */
+.sidebar-menu {
+  list-style: none;
+  margin-top: 20px;
+}
+
+.sidebar-menu li {
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: #021a00;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar-menu li:hover {
+  background: #024000;
+  transform: translateX(5px);
+}
+
+/* divider */
+.menu-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 10px 0;
+}
+
+/* auth */
+.auth {
+  text-align: center;
+  font-weight: bold;
+}
+
+.login {
+  border: 1px solid rgb(0, 255, 21);
+}
+
+.register {
+  background: rgb(0, 255, 42);
+  color: black;
+}
+
+/* ================= CONTENT ================= */
+.main-content {
+  padding: 20px;
+}
+
+/* ================= SEARCH ================= */
+.search-box {
+  width: 100%;
+  background: #0a0a0a;
+  padding: 10px;
+  display: none;
+}
+
+.search-box.active {
+  display: block;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #001a00;
+  color: white;
+  outline: none;
+}
+
+/* ================= HERO SLIDER ================= */
+.hero-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  width: 100%;
+  flex-shrink: 0;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* DOTS */
+.dots {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: gray;
+  border-radius: 50%;
+  margin: 0 3px;
+}
+
+.dots .active {
+  background: rgb(5, 138, 71);
+}
+
+
+/* ================= GAME LIST ================= */
+/* GRID GAME */
+.game-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* FIX 2 kolom */
+  gap: 12px;
+  padding: 10px 0;
+}
+
+/* CARD */
+.game-card {
+  background: #001a06;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+/* GAMBAR - sesuaikan aspect ratio 16:9 */
+.game-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* otomatis tinggi sesuai lebar */
+  object-fit: contain;     /* jangan potong gambar, sesuaikan di dalam */
+  background: #000;
+}
+
+/* INFO GAME */
+.game-info {
+  padding: 8px;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.game-info h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(57, 240, 97);
+  margin-bottom: 4px;
+}
+
+.game-info p {
+  font-size: 12px;
+  color: #fff;
+  opacity: 0.7;
+}
+
+/* HOVER EFFECT */
+.game-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 21, 0.4);
+}
+
+
+/* ================= STATISTIK TYPO ================= */
+.stats-typo {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 10px;
+}
+
+/* block */
+.stat-block {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 15px;
+}
+
+/* ANGKA BESAR */
+.stat-block h1 {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  
+  background: linear-gradient(90deg, rgb(0, 255, 128), #63ff3c);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  text-shadow: 0 0 20px rgba(255,215,0,0.2);
+}
+
+/* label */
+.stat-block span {
+  font-size: 13px;
+  opacity: 0.6;
+  letter-spacing: 1px;
+}
+
+/* animasi muncul */
+.stat-block {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s forwards;
+}
+
+.stat-block:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stat-block:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* responsive */
+@media (max-width: 500px) {
+  .stat-block h1 {
+    font-size: 36px;
+  }
+}
+
+
+/* ================= ARTIKEL TEXT ================= */
+.artikel-text {
+  margin-top: 40px;
+  padding: 15px 10px;
+  text-align: center;
+}
+
+/* judul */
+.artikel-text h2 {
+  font-size: 18px;
+  color: rgb(9, 255, 0);
+  margin-bottom: 8px;
+}
+
+/* deskripsi */
+.artikel-text p {
+  font-size: 13px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* highlight domain */
+.artikel-text span {
+  color: rgb(60, 255, 0);
+  font-weight: 600;
+}
+/* ================= ARTIKEL BANNER ================= */
+.artikel-banner {
+  margin-top: 40px;
+  padding: 10px;
+  text-align: center;
+}
+
+/* gambar banner */
+.banner-img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+/* hover efek */
+.banner-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+/* judul */
+.artikel-banner h2 {
+  font-size: 18px;
+  color: rgb(21, 255, 0);
+  margin-bottom: 6px;
+}
+
+/* deskripsi */
+.artikel-banner p {
+  font-size: 13px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* highlight domain */
+.artikel-banner span {
+  color: rgb(21, 255, 0);
+  font-weight: 600;
+}
+
+
+
+
+/* footer */
+
+
+/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
+.footer {
+  background: #0a0a0a;
+  padding: 30px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* container utama */
+/* container utama */
+.footer-container {
+  max-width: 1100px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 🔥 pasti kiri kanan */
+  gap: 20px;
+}
+
+/* ===== KOLOM ===== */
+.footer-menu,
+.footer-info {
+  width: 45%;
+}
+
+/* ===== TITLE ===== */
+.footer-menu h3,
+.footer-info h3 {
+  color: rgb(0, 255, 21);
+  margin-bottom: 10px;
+}
+
+/* ===== LIST ===== */
+.footer-menu ul,
+.footer-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-menu li,
+.footer-info li {
+  margin-bottom: 8px;
+  color: #ccc;
+  font-size: 14px;
+}
+
+/* ===== LINK ===== */
+.footer-menu a {
+  text-decoration: none;
+  color: #ccc;
+  transition: 0.3s;
+}
+
+.footer-menu a:hover {
+  color: rgb(9, 255, 0);
+  padding-left: 5px;
+}
+
+/* ===== RIGHT ALIGN INFO ===== */
+.footer-info {
+  text-align: right;
+}
+
+/* ===== COPYRIGHT ===== */
+.footer-bottom {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 13px;
+  color: #777;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 15px;
+}
+
+/* ===== RESPONSIVE (HP) ===== */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-menu,
+  .footer-info {
+    width: 100%;
+    text-align: left; /* balik normal di HP */
+  }
+}
+
+/* ================= BANNER BAWAH ================= */
+.bottom-banner {
+  margin-top: 40px;
+  padding: 10px;
+}
+
+.bottom-banner img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  transition: 0.3s;
+}
+
+/* efek hover */
+.bottom-banner img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.banner-text {
+  text-align: center;
+  max-width: 800px;
+  margin: auto;
+}
+
+.banner-text p {
+  font-size: 13px;
+  opacity: 0.75;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+
+
+
+.sidebar-menu a {
+  text-decoration: none;
+  color: white;
+  display: block;
+}
+
+
+
+

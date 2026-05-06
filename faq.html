@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - amanahgame.store</title>
+
+  <link rel="stylesheet" href="index.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0c3f01, #022901);
+      color: white;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: gold;
+      margin-bottom: 30px;
+    }
+
+    .faq-item {
+      background: rgba(3, 248, 23, 0.05);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(1, 59, 9, 0.2);
+    }
+
+    .faq-question {
+      padding: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-question:hover {
+      background: rgba(18, 100, 2, 0.05);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 15px;
+      opacity: 0.8;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding: 15px;
+    }
+
+    .icon {
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .icon {
+      transform: rotate(180deg);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>❓ Frequently Asked Questions</h1>
+
+  <!-- FAQ LIST -->
+  <div class="faq-item">
+    <div class="faq-question">
+      How do I top up?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      Simply choose your game, select the product, enter your game ID, and complete the payment. No login is required.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Do I need to create an account?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      No, our system is designed for quick access. You can make purchases using only your game ID.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      How long does the process take?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      Most transactions are processed instantly or within a few minutes after payment confirmation.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      What payment methods are available?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      We support various payment methods such as bank transfer and e-wallets, depending on availability.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Is this platform safe?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      Yes. We prioritize security and transparency. Your data is not stored unnecessarily and all transactions are handled securely.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Can I track my order?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      Yes, you can check your transaction status using your transaction ID on the "Cek Transaksi" page.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      What if my top-up fails?
+      <span class="icon">▼</span>
+    </div>
+    <div class="faq-answer">
+      If your transaction fails, please contact our support team via WhatsApp for assistance.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    © 2026 amanahgame.store. All rights reserved.
+  </div>
+</div>
+
+<script>
+const faqItems = document.querySelectorAll(".faq-item");
+
+faqItems.forEach(item => {
+  item.querySelector(".faq-question").addEventListener("click", () => {
+    item.classList.toggle("active");
+  });
+});
+</script>
+
+</body>
+</html>

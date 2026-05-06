@@ -1,0 +1,46 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0a0a0a;
+  color: white;
+  padding: 0;
+  margin: 0;
+}
+.navbar {
+  background: linear-gradient(90deg, #000, #2b0000);
+  padding: 15px;
+  text-align: center;
+}
+.logo span { color: gold; }
+
+.container { padding: 20px; max-width: 500px; margin: auto; }
+
+.form-group { margin-bottom: 15px; }
+.form-group input, .form-group select {
+  width: 100%; padding: 10px; border-radius: 8px; border: none;
+  background: #1a0000; color: white; outline: none;
+}
+
+.grid-nominal {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.nominal-card {
+  background: #2b0000; padding: 10px; border-radius: 8px; text-align: center;
+  cursor: pointer; transition: 0.2s;
+}
+.nominal-card.selected { border: 2px solid gold; }
+
+.nominal-card:hover { transform: scale(1.03); }
+
+.btn {
+  width: 100%; padding: 12px; background: gold; color: black;
+  border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+  transition: 0.2s;
+}
+.btn:hover { background: #ffcb00; }
+
+.payment-page { background: #1a0000; padding: 15px; border-radius: 8px; margin-top: 20px; }
+.payment-page p { margin: 5px 0; }

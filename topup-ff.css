@@ -1,0 +1,181 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+/* BODY */
+body {
+  background: #0b0b0b;
+  color: white;
+}
+
+/* CONTAINER */
+.ff-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 15px;
+  padding-bottom: 40px;
+}
+
+/* HERO */
+.ff-hero {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.ff-logo {
+  width: 70px;
+  margin-bottom: 5px;
+}
+
+.ff-hero h2 {
+  font-size: 18px;
+}
+
+/* STEP CARD */
+.ff-step {
+  background: #141414;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* TITLE */
+.ff-step h3 {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: gold;
+}
+
+/* INPUT */
+.ff-step input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #1f1f1f;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+/* GRID PRODUK */
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* ITEM PRODUK */
+.product-item {
+  background: #1f1f1f;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid transparent;
+}
+
+/* HOVER */
+.product-item:hover {
+  background: #2a2a2a;
+}
+
+/* ACTIVE */
+.product-item.active {
+  border: 1px solid gold;
+  background: #2a2a2a;
+}
+
+/* PAYMENT LIST */
+.payment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* PAYMENT ITEM */
+.payment-item {
+  background: #1f1f1f;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: 0.2s;
+}
+
+/* ACTIVE PAYMENT */
+.payment-item.active {
+  border: 1px solid gold;
+  background: #2a2a2a;
+}
+
+/* BUTTON UTAMA */
+.btn-main {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: gold;
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* BUTTON HOVER */
+.btn-main:hover {
+  background: #ffd700;
+}
+
+/* BOX DETAIL */
+.payment-box {
+  background: #1a1a1a;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.payment-box h4 {
+  margin-bottom: 10px;
+}
+
+.payment-box p {
+  margin-bottom: 6px;
+}
+
+.payment-box img {
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+/* LOADING TEXT */
+.loading-text {
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+}
+
+/* ANIMASI MUNCUL */
+#paymentStep,
+#resultStep {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

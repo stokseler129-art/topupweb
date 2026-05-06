@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembayaran</title>
+
+  <style>
+    body {
+      background: #0b0b0b;
+      color: white;
+      font-family: sans-serif;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 15px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .card {
+      background: #141414;
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .badge {
+      background: orange;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .detail p {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    #total {
+      color: gold;
+      margin-top: 5px;
+    }
+
+    .payment-item {
+      background: #1f1f1f;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: gold;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: gold;
+      color: black;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h2>💳 Pembayaran</h2>
+    <p>Selesaikan pembayaran Anda</p>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="card">
+    <div class="badge">MENUNGGU PEMBAYARAN</div>
+
+    <h3 id="invoice">-</h3>
+
+    <div class="detail">
+      <p>ID: <b id="userId">-</b></p>
+      <p>Produk: <b id="produk">-</b></p>
+      <p>Total:</p>
+      <h2 id="total">-</h2>
+    </div>
+  </div>
+
+  <!-- PAYMENT -->
+  <div class="card">
+    <h3>Pilih Pembayaran</h3>
+    <div id="paymentList">
+      <p>Loading rekening...</p>
+    </div>
+  </div>
+
+  <!-- TIMER -->
+  <div class="card timer">
+    ⏳ Selesaikan dalam <span id="countdown">15:00</span>
+  </div>
+
+  <!-- BUTTON -->
+  <button class="btn" onclick="sendWhatsApp()">
+    Saya Sudah Bayar
+  </button>
+
+</div>
+
+<script>
+// ================= CONFIG =================
+const CONFIG = {
+  BIN_ID: "69fba3dbc0954111d8e83949",
+  API_KEY: "$2a$10$b7426vCN3qvmHEGqIaeofuk0b.FXiKdEHj3Nh3zapOGnat.kn3TaW"
+};
+
+// ================= GLOBAL =================
+let ADMIN_WA = "";
+let invoice = "INV" + Date.now();
+
+// ================= AMBIL PARAM =================
+const params = new URLSearchParams(window.location.search);
+const userId = params.get("id") || "-";
+const produk = params.get("produk") || "-";
+const harga = params.get("harga") || "0";
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  renderOrder();
+  loadData();
+  startTimer();
+});
+
+// ================= RENDER ORDER =================
+function renderOrder() {
+  setText("invoice", invoice);
+  setText("userId", userId);
+  setText("produk", produk);
+  setText("total", "Rp " + Number(harga).toLocaleString("id-ID"));
+}
+
+// ================= HELPER ANTI ERROR =================
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = value;
+}
+
+// ================= FETCH JSON =================
+async function loadData() {
+  try {
+    const res = await fetch(
+      `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`,
+      {
+        headers: { "X-Master-Key": CONFIG.API_KEY }
+      }
+    );
+
+    const result = await res.json();
+    const data = result.record;
+
+    // ambil WA
+    ADMIN_WA = data?.settings?.whatsapp || "";
+
+    // render payment
+    renderPayment(data?.payments || []);
+
+  } catch (err) {
+    console.error("Gagal ambil data:", err);
+  }
+}
+
+// ================= RENDER PAYMENT =================
+function renderPayment(payments) {
+  const container = document.getElementById("paymentList");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  payments.forEach(p => {
+    if (!p.active) return;
+
+    const div = document.createElement("div");
+    div.className = "payment-item";
+
+    div.innerHTML = `
+      <b>${p.name}</b><br>
+      ${p.number || "-"}<br>
+      a.n ${p.owner || "-"}
+      ${p.number ? `<button class="copy-btn" onclick="copyText('${p.number}')">Salin</button>` : ""}
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// ================= COPY =================
+function copyText(text) {
+  navigator.clipboard.writeText(text);
+  alert("Nomor disalin!");
+}
+
+// ================= WHATSAPP =================
+function sendWhatsApp() {
+  if (!ADMIN_WA) {
+    alert("Nomor admin belum tersedia!");
+    return;
+  }
+
+  let msg = `*KONFIRMASI PEMBAYARAN*%0A`;
+  msg += `Invoice: ${invoice}%0A`;
+  msg += `ID: ${userId}%0A`;
+  msg += `Produk: ${produk}%0A`;
+  msg += `Total: Rp ${Number(harga).toLocaleString("id-ID")}`;
+
+  window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, "_blank");
+}
+
+// ================= TIMER =================
+function startTimer() {
+  let time = 900; // 15 menit
+
+  const interval = setInterval(() => {
+    let m = Math.floor(time / 60);
+    let s = time % 60;
+
+    setText("countdown", `${m}:${s < 10 ? "0" : ""}${s}`);
+
+    time--;
+
+    if (time < 0) {
+      clearInterval(interval);
+      setText("countdown", "Waktu habis");
+    }
+  }, 1000);
+}
+</script>
+
+</body>
+</html>

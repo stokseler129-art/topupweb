@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel Pro</title>
+
+<style>
+body {
+  background: #01240f;
+  color: white;
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+h1 { color: #00ff6a; }
+
+select, input, button {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  background: gold;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.card {
+  background: #081a00;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.small-btn {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⚙️ Admin Panel Pro</h1>
+
+<select id="gameSelect" onchange="loadData()"></select>
+
+<!-- PRODUK -->
+<h3>Produk</h3>
+<div id="productList"></div>
+
+<h4>Tambah Produk</h4>
+<input type="text" id="name" placeholder="Nama">
+<input type="number" id="price" placeholder="Harga">
+<button onclick="addProduct()">Tambah</button>
+
+<!-- SETTINGS -->
+<h3>WhatsApp</h3>
+<input type="text" id="wa">
+<button onclick="saveWA()">Simpan</button>
+
+<!-- PAYMENTS -->
+<h3>Rekening</h3>
+<div id="paymentList"></div>
+
+<h4>Tambah Rekening</h4>
+<input type="text" id="bankName" placeholder="Bank">
+<input type="text" id="bankNumber" placeholder="Nomor">
+<input type="text" id="bankOwner" placeholder="Atas Nama">
+<button onclick="addBank()">Tambah Rekening</button>
+
+<script>
+
+/* CONFIG */
+const API_KEY = "$2a$10$b7426vCN3qvmHEGqIaeofuk0b.FXiKdEHj3Nh3zapOGnat.kn3TaW";
+
+const BINS = {
+  valorant: "69fba34e250b1311c313248e",
+  hok: "69fba36cc0954111d8e836ef",
+  roblox: "69fba38f250b1311c31325f0",
+  pubg: "69fba3acc0954111d8e8383f",
+  mlbb: "69fba3c0c0954111d8e838a6",
+  ff: "69fba3dbc0954111d8e83949"
+};
+
+/* INIT */
+function init() {
+  const select = document.getElementById("gameSelect");
+  for (let key in BINS) {
+    select.innerHTML += `<option value="${key}">${key.toUpperCase()}</option>`;
+  }
+  loadData();
+}
+
+/* FETCH */
+async function getData(binId) {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+    headers: { "X-Master-Key": API_KEY }
+  });
+  const json = await res.json();
+  return json.record;
+}
+
+async function updateData(binId, data) {
+  await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": API_KEY
+    },
+    body: JSON.stringify(data)
+  });
+}
+
+/* LOAD */
+async function loadData() {
+  const game = gameSelect.value;
+  const binId = BINS[game];
+
+  const data = await getData(binId);
+  window.currentData = data;
+
+  if (!data.products) data.products = [];
+  if (!data.settings) data.settings = {};
+  if (!data.payments) data.payments = [];
+
+  renderProducts();
+  renderPayments();
+
+  wa.value = data.settings.whatsapp || "";
+}
+
+/* PRODUK */
+function renderProducts() {
+  productList.innerHTML = "";
+
+  currentData.products.forEach((p, i) => {
+    productList.innerHTML += `
+      <div class="card">
+        <div class="row">
+          <div>
+            <b>${p.name}</b><br>
+            Rp${p.price} <br>
+            Status: ${p.active ? "✅" : "❌"}
+          </div>
+          <div>
+            <button class="small-btn" onclick="editProduct(${i})">✏️</button>
+            <button class="small-btn" onclick="toggleProduct(${i})">🔄</button>
+            <button class="small-btn" onclick="deleteProduct(${i})">❌</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+async function addProduct() {
+  currentData.products.push({
+    name: name.value,
+    price: parseInt(price.value),
+    category: "general",
+    active: true
+  });
+
+  await save();
+}
+
+async function editProduct(i) {
+  const p = currentData.products[i];
+  const newPrice = prompt("Harga baru:", p.price);
+  if (!newPrice) return;
+
+  p.price = parseInt(newPrice);
+  await save();
+}
+
+async function toggleProduct(i) {
+  currentData.products[i].active = !currentData.products[i].active;
+  await save();
+}
+
+async function deleteProduct(i) {
+  if (!confirm("Hapus?")) return;
+  currentData.products.splice(i, 1);
+  await save();
+}
+
+/* WA */
+async function saveWA() {
+  currentData.settings.whatsapp = wa.value;
+  await save();
+}
+
+/* PAYMENT */
+function renderPayments() {
+  paymentList.innerHTML = "";
+
+  currentData.payments.forEach((p, i) => {
+    paymentList.innerHTML += `
+      <div class="card">
+        ${p.name} - ${p.number} (${p.owner})
+        <button onclick="deleteBank(${i})">❌</button>
+      </div>
+    `;
+  });
+}
+
+async function addBank() {
+  currentData.payments.push({
+    name: bankName.value,
+    number: bankNumber.value,
+    owner: bankOwner.value,
+    type: "bank",
+    active: true
+  });
+
+  await save();
+}
+
+async function deleteBank(i) {
+  currentData.payments.splice(i, 1);
+  await save();
+}
+
+/* SAVE */
+async function save() {
+  const game = gameSelect.value;
+  const binId = BINS[game];
+
+  await updateData(binId, currentData);
+
+  loadData();
+}
+
+init();
+
+</script>
+
+</body>
+</html>

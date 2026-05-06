@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Up PUBG Mobile</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #0b0b0b;
+      color: white;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 15px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .card {
+      background: #141414;
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 8px;
+      background: #1f1f1f;
+      color: white;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .item {
+      background: #1f1f1f;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      border: 1px solid transparent;
+    }
+
+    .item.active {
+      border: 1px solid gold;
+      background: #2a2a2a;
+    }
+
+    .price {
+      color: gold;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: gold;
+      color: black;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h2>🎮 PUBG Mobile</h2>
+    <p>Top Up UC PUBG</p>
+  </div>
+
+  <!-- INPUT ID -->
+  <div class="card">
+    <h3>Masukkan User ID</h3>
+    <input type="text" id="userId" placeholder="Contoh: 5123456789">
+  </div>
+
+  <!-- PRODUK -->
+  <div class="card">
+    <h3>Pilih UC</h3>
+    <div class="grid" id="productList">
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <!-- BUTTON -->
+  <button class="btn" onclick="buyNow()">Beli Sekarang</button>
+
+</div>
+
+<script>
+const CONFIG = {
+  BIN_ID: "69fba3acc0954111d8e8383f",
+  API_KEY: "$2a$10$b7426vCN3qvmHEGqIaeofuk0b.FXiKdEHj3Nh3zapOGnat.kn3TaW"
+};
+
+let selectedProduct = null;
+
+// ================= LOAD PRODUK =================
+async function loadProducts() {
+  try {
+    const res = await fetch(
+      `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`,
+      {
+        headers: { "X-Master-Key": CONFIG.API_KEY }
+      }
+    );
+
+    const result = await res.json();
+    const products = result.record.products;
+
+    const container = document.getElementById("productList");
+    container.innerHTML = "";
+
+    products.forEach(p => {
+      if (!p.active) return;
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      div.innerHTML = `
+        ${p.name}
+        <div class="price">Rp ${p.price.toLocaleString("id-ID")}</div>
+      `;
+
+      div.onclick = () => {
+        document.querySelectorAll(".item").forEach(el => el.classList.remove("active"));
+        div.classList.add("active");
+        selectedProduct = p;
+      };
+
+      container.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ================= BELI =================
+function buyNow() {
+  const userId = document.getElementById("userId").value;
+
+  if (!userId) {
+    alert("Masukkan User ID!");
+    return;
+  }
+
+  if (!selectedProduct) {
+    alert("Pilih produk dulu!");
+    return;
+  }
+
+  const url = `pembayaranff.html?id=${userId}&produk=${selectedProduct.name}&harga=${selectedProduct.price}`;
+
+  window.location.href = url;
+}
+
+// ================= INIT =================
+loadProducts();
+</script>
+
+</body>
+</html>
